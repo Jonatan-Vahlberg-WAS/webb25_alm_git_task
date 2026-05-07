@@ -9,4 +9,12 @@ describe('Category model validation', () => {
 
     expect(error).toBeUndefined()
   })
+
+  it('fails validation when name is missing', () => {
+    const category = new Category({ description: 'Food from all over the world' })
+    const error = category.validateSync()
+
+    expect(error).toBeDefined()
+    expect(error.errors.name.message).toBe('Category name is required')
+  })
 })
