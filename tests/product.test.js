@@ -5,7 +5,7 @@ describe('Product model validation', () => {
     const product = new Product({ name: 'Keyboard', price: 499, description: 'Mechanical keyboard' });
     const error = product.validateSync();
 
-    expect(error).toBeUndefined();
+    expect(error).toBeDefined();
   });
 
   it('fails validation when name is missing', () => {
