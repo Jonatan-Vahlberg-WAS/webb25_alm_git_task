@@ -7,8 +7,8 @@ const productSchema = new mongoose.Schema(
       required: [true, "Product name is required"],
       trim: true,
       validate: {
-        validator: (name) => name.length < 1,
-        message: "Your name must contain at least one letter",
+        validator: () => !this.name,
+        message: "Name required",
       },
     },
     price: {
