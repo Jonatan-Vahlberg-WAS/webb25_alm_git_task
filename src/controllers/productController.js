@@ -2,8 +2,8 @@ const Product = require("../models/Product");
 
 const getProducts = async (req, res) => {
   try {
-    const { name } = req.query;
-    const products = await Product.find();
+    let { name } = req.query;
+    let products = await Product.find();
     if (name && name.trim() !== "") {
       products = products.filter((p) =>
         p.name.toLocaleLowerCase().includes(name.toLocaleLowerCase()),
