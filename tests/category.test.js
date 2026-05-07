@@ -30,3 +30,16 @@ describe('GET /api/categories', () => {
     expect(res.body.length).toBeGreaterThan(0)
   })
 })
+
+describe('PUT /api/categories/:id', () => {
+  it('should update an existing category name', async () => {
+    const category = await Category.create({ name: 'Old Name' })
+
+    const res = await request(app)
+      .put(`/api/categories/${category._id}`)
+      .send({ name: 'New Updated Name' })
+
+    expect(res.statusCode).toBe(200);
+    expect(res.body.name).toBe('New Updated Name')
+  })
+})
