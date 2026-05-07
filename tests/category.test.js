@@ -43,3 +43,16 @@ describe('PUT /api/categories/:id', () => {
     expect(res.body.name).toBe('New Updated Name')
   })
 })
+
+describe('DELETE /api/categories/:id', () => {
+  it('should delete a category and return 200', async () => {
+    const category = await Category.create({ name: 'Delete Me' })
+
+    const res = await request(app).delete(`/api/categories/${category._id}`)
+
+    expect(res.statusCode).toBe(200)
+    
+    const deletedCategory = await Category.findById(category._id)
+    expect(deletedCategory).toBeNull()
+  })
+})
