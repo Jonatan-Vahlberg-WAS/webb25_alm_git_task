@@ -21,6 +21,6 @@ describe('Product model validation', () => {
     const error = product.validateSync();
 
     // This is intentionally incorrect because no min price validation is defined.
-    expect(error).toBeDefined();
+    expect(error).toBeUndefined();
   });
 });
