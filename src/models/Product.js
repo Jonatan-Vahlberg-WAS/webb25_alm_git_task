@@ -9,11 +9,22 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, 'Product price is required'],
+      required: true,
+      min: [0, 'Product price must be a positive number'],
     },
     description: {
       type: String,
       default: '',
+    },
+
+    //  NEW: Optional category field with enum validation
+    category: {
+      type: String,
+      enum: {
+        values: ['electronics', 'clothing', 'home'],
+        message: 'Invalid category. Allowed values: electronics, clothing, home',
+      },
+      default: undefined, 
     },
   },
   {
