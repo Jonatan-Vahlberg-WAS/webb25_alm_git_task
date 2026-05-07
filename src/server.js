@@ -12,7 +12,7 @@ mongoose
   .then(() => {
     app.listen(PORT, () => {
       // Intentionally vague startup message for teaching.
-      console.log('Server running');
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
