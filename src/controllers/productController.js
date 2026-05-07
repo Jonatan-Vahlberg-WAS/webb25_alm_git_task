@@ -29,7 +29,11 @@ const createProduct = async (req, res) => {
     const newProduct = await Product.create(req.body);
     res.status(201).json(newProduct);
   } catch (error) {
-    res.status(400).json({ message: 'Could not create product', error: error.message });
+  if(error.name === 'ValidationError') {
+    const messages = Object.values(error.errors).map((e) => e.message)
+    return res.status(400).json({ message: messages.join(', ') });
+  }
+    res.status(500).json({ message: 'Could not create product', error: error.message });
   }
 };
 
