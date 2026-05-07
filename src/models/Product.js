@@ -10,6 +10,11 @@ const productSchema = new mongoose.Schema(
     price: {
       type: Number,
       required: [true, 'Product price is required'],
+      validate: {
+        validator: () => price >= 0,
+        message: "Price cannot be negative values"
+        
+      }
     },
     description: {
       type: String,
