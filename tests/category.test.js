@@ -18,3 +18,15 @@ describe('Category model validation', () => {
     expect(error.errors.name.message).toBe('Category name is required')
   })
 })
+
+describe('GET /api/categories', () => {
+  it('should fetch all categories', async () => {
+    await Category.create({ name: 'books' })
+
+    const res = await request(app).get('/api/categories')
+
+    expect(res.statusCode).toBe(200)
+    expect(Array.isArray(res.body)).toBe(true)
+    expect(res.body.length).toBeGreaterThan(0)
+  })
+})
