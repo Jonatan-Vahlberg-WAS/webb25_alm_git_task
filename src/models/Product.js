@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema(
     },
     price: {
       type: Number,
-      required: [true, 'Product price is required'],
+      required: true,
+      min: [0, 'Price must be a positive number'],
     },
     description: {
       type: String,
