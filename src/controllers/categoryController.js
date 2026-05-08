@@ -1,6 +1,17 @@
 const Category = require('../models/Category')
 
-const getCategory = () => {}
+const getCategory = async (req, res) => {
+  try {
+    const categories = await Category.find()
+    if (!categories) {
+      res.status(404).json({ message: 'Categories not found' })
+    }
+    res.status(200).json(categories)
+  } catch (error) {
+    res.status(500).json({ message: 'Could not fetch categories' })
+  }
+}
+
 const getCategoryById = () => {}
 const createCategory = () => {}
 const updateCategory = async (req, res) => {
@@ -43,5 +54,6 @@ const deleteCategory = async (req, res) => {
 
 module.exports = {
   updateCategory,
-  deleteCategory
+  deleteCategory,
+  getCategory
 }
