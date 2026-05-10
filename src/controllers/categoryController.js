@@ -12,8 +12,25 @@ const getCategory = async (req, res) => {
   }
 }
 
-const getCategoryById = () => {}
-const createCategory = () => {}
+const getCategoryById = async (req, res) => {
+  try {
+    const { id } = req.params
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: 'Invalid category ID' })
+    }
+    const category = await Category.findById(id)
+    if (!category) {
+      return res.status(404).json({ message: 'Category not found' })
+    }
+    res.status(200).json(category)
+  } catch (error) {
+    res.status(500).json({ message: 'Could not fetch category' })
+  }
+}
+
+// TODO: Funktionen till POST ("/") endpoint
+// const createCategory = () => {}
+
 const updateCategory = async (req, res) => {
   try {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
@@ -55,5 +72,6 @@ const deleteCategory = async (req, res) => {
 module.exports = {
   updateCategory,
   deleteCategory,
-  getCategory
+  getCategory,
+  getCategoryById
 }
