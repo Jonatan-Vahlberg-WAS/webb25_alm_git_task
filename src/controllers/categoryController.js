@@ -28,7 +28,7 @@ const getCategoryById = async (req, res) => {
   }
 }
 
-// TODO: Funktionen till POST ("/") endpoint
+// TODO: Funktionen till POST ("/") endpoint *Glöm inte att exportera längst ner
 // const createCategory = () => {}
 
 const updateCategory = async (req, res) => {
