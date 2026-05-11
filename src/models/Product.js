@@ -17,11 +17,8 @@ const productSchema = new mongoose.Schema(
       default: ''
     },
     category: {
-      type: String,
-      enum: {
-        values: ['electronics', 'clothing', 'home'],
-        message: '{VALUE} is not a supported category'
-      },
+      type: mongoose.SchemaTypes.ObjectId,
+      ref: "Category",
       required: false,
       trim: true
     }

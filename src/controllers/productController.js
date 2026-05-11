@@ -25,7 +25,7 @@ const getProducts = async (req, res) => {
     const skip = (page - 1) * limit
 
     const total = await Product.countDocuments()
-    const products = await Product.find(filter).skip(skip).limit(limit).sort('-createdAt')
+    const products = await Product.find(filter).skip(skip).limit(limit).sort('-createdAt').populate("category", "name")
     res.status(200).json(products)
   } catch (error) {
     res.status(500).json({ message: 'Could not fetch products' })
