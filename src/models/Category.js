@@ -4,7 +4,7 @@ const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      require: [true, 'Category is required'],
+      require: [true, 'Category name is required'],
       trim: true
     },
     description: {
