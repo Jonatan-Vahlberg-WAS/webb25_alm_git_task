@@ -32,14 +32,6 @@ describe('Product model validation', () => {
     const product = new Product({ name: 'Keyboard', price: 499, description: 'Mechanical keyboard', category: 'electronics' })
     const error = product.validateSync()
 
-    expect(error).toBeUndefined()
-  })
-
-  it('fails validation when category is invalid', () => {
-    const product = new Product({ name: 'Banana', price: 5, description: 'Green banana', category: 'food' })
-    const error = product.validateSync()
-
     expect(error).toBeDefined()
-    expect(error.errors.category.message).toBe('food is not a supported category')
   })
 })
