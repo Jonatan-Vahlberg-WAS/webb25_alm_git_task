@@ -1,3 +1,4 @@
+const mongoose = require('mongoose')
 const { getFullTextSearch } = require('../utils/fullTextSearch')
 const Product = require('../models/Product')
 
