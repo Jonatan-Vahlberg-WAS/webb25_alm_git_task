@@ -1,5 +1,5 @@
 const mongoose = require('mongoose')
-
+const ProductPriceHistory = require('./ProductPriceHistory')
 const productSchema = new mongoose.Schema(
   {
     name: {
