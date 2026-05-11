@@ -3,6 +3,8 @@ const { updateCategory, deleteCategory, getCategory, getCategoryById, createCate
 
 const router = express.Router()
 
+
+router.post('/', createCategory)
 router.get('/', getCategory)
 router.get('/:id', getCategoryById)
 router.post('/', createCategory)
