@@ -3,6 +3,8 @@ const { updateCategory, deleteCategory, getCategory } = require('../controllers/
 
 const router = express.Router()
 
+
+
 router.get('/', getCategory)
 router.get('/:id')
 router.post('/')
