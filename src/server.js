@@ -10,12 +10,18 @@ const DEBUG = ['1', 'true', 'yes'].includes(String(process.env.DEBUG).toLowerCas
 
 mongoose.set('debug', DEBUG)
 
+if (!DEBUG) {
+  console.log = () => {}
+  console.warn = () => {}
+}
+
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
     app.listen(PORT, () => {
-      // Intentionally vague startup message for teaching.
-      console.log('Server running on PORT', PORT)
+      console.info('Server running on PORT', PORT)
+      console.info('MongoDB connected to', MONGODB_URI)
+      console.info('Debug mode is', DEBUG ? 'enabled' : 'disabled')
     })
   })
   .catch((error) => {
