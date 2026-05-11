@@ -5,6 +5,10 @@ const categorySchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, 'Category name is required'],
+      enum: {
+        values: ['electronics', 'clothing', 'home'],
+        message: '{VALUE} is not a supported category'
+      },
       trim: true
     },
     description: {
