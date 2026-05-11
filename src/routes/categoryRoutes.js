@@ -1,10 +1,10 @@
 const express = require('express')
-const { updateCategory, deleteCategory, getCategory, getCategoryById } = require('../controllers/categoryController')
+const { createCategory, updateCategory, deleteCategory, getCategory, getCategoryById } = require('../controllers/categoryController')
 
 const router = express.Router()
 
 
-
+router.post('/', createCategory)
 router.get('/', getCategory)
 router.get('/:id', getCategoryById)
 // TODO: Implement createCategory fn från categoryController.js
