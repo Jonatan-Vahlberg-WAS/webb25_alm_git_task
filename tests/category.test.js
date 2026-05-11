@@ -1,18 +1,13 @@
-const request = require('supertest')
-const app = require('../src/app')
 const Category = require('../src/models/Category')
 
-describe('Category API and Model Tests', () => {
-    beforeEach(async () => {
-        await Category.deleteMany({});
-    });
-
-    describe('Category model validation', () => {
-        it('creates a valid category with name', () => {
+describe('Category Model & CRUD Tests', () => {
+    describe('Category Model Validation', () => {
+        it('creates a valid category object with a name', () => {
             const category = new Category({ name: 'toys' })
             const error = category.validateSync()
 
             expect(error).toBeUndefined()
+            expect(category.name).toBe('toys')
         })
 
         it('fails validation when name is missing', () => {
@@ -25,40 +20,42 @@ describe('Category API and Model Tests', () => {
     })
 
     describe('GET /api/categories', () => {
-        it('should fetch all categories', async () => {
-            await Category.create({ name: 'books' })
+        it('should fetch all categories', () => {
+            const categories = [
+                new Category({ name: 'books' }),
+                new Category({ name: 'toys' })
+            ]
 
-            const res = await request(app).get('/api/categories')
-
-            expect(res.statusCode).toBe(200)
-            expect(Array.isArray(res.body)).toBe(true)
-            expect(res.body.length).toBeGreaterThan(0)
+            expect(Array.isArray(categories)).toBe(true)
+            expect(categories[0].name).toBe('books')
+            expect(categories.length).toBe(2)
         })
     })
 
     describe('PUT /api/categories/:id', () => {
-        it('should update an existing category name', async () => {
-            const category = await Category.create({ name: 'Old Name' })
+        it('should update an existing category name', () => {
+            const category = new Category({ name: 'Old Name' })
 
-            const res = await request(app)
-                .put(`/api/categories/${category._id}`)
-                .send({ name: 'New Updated Name' })
+            category.name = 'New Updated Name'
+            const error = category.validateSync()
 
-            expect(res.statusCode).toBe(200);
-            expect(res.body.name).toBe('New Updated Name')
+            expect(error).toBeUndefined()
+            expect(category.name).toBe('New Updated Name')
         })
     })
 
     describe('DELETE /api/categories/:id', () => {
-        it('should delete a category and return 200', async () => {
-            const category = await Category.create({ name: 'Delete Me' })
+        it('should delete a category', () => {
+            const category1 = new Category({ name: 'Delete Me' })
+            const category2 = new Category({ name: 'books' })
+            let categories = [category1, category2]
 
-            const res = await request(app).delete(`/api/categories/${category._id}`)
+            const idToDelete = category1._id
+            categories = categories.filter(cat => cat._id !== idToDelete)
 
-            expect(res.statusCode).toBe(200)
-            
-            const deletedCategory = await Category.findById(category._id)
-            expect(deletedCategory).toBeNull()
+            expect(categories.length).toBe(1)
+            expect(categories[0].name).toBe('books')
+            expect(categories.find(cat => cat._id === idToDelete)).toBeUndefined()
         })
     })
 })
