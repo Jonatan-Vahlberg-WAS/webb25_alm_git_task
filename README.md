@@ -83,7 +83,7 @@ By default the API listens on **port 3000** and Vite serves the app on **port 51
 
 ## Run tests
 
-API tests (from repository root):
+API tests (from repository root) use **[mongodb-memory-server](https://github.com/nodkz/mongodb-memory-server)** — an in-process MongoDB instance. You do **not** need Atlas, a local `mongod`, or `MONGODB_TEST_URI` for `npm test`. The first run may download a MongoDB binary (requires network).
 
 ```bash
 npm test

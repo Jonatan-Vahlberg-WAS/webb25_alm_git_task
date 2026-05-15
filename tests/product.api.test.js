@@ -4,8 +4,7 @@ const app = require('../src/app')
 const Product = require('../src/models/Product')
 const Category = require('../src/models/Category')
 const User = require('../src/models/User')
-
-const MONGODB_TEST_URI = process.env.MONGODB_TEST_URI || 'mongodb://127.0.0.1:27017/product_api_test'
+const { connectDb, disconnectDb } = require('./helpers/db')
 
 describe('Product API', () => {
   let category
@@ -14,7 +13,7 @@ describe('Product API', () => {
   let authToken
 
   beforeAll(async () => {
-    await mongoose.connect(MONGODB_TEST_URI)
+    await connectDb()
     await User.deleteMany({})
     await Category.deleteMany({})
     const reg = await request(app).post('/auth/register').send({
@@ -32,7 +31,7 @@ describe('Product API', () => {
   })
 
   afterAll(async () => {
-    await mongoose.connection.close()
+    await disconnectDb()
   })
 
   beforeEach(async () => {

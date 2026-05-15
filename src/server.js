@@ -10,11 +10,6 @@ const DEBUG = ['1', 'true', 'yes'].includes(String(process.env.DEBUG).toLowerCas
 
 mongoose.set('debug', DEBUG)
 
-if (!DEBUG) {
-  console.log = () => {}
-  console.warn = () => {}
-}
-
 mongoose
   .connect(MONGODB_URI)
   .then(() => {
