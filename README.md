@@ -1,4 +1,4 @@
-# Express + Mongoose Product API
+# Express + Mongoose Product API!
 
 Simple REST API project for teaching Git workflows, plus an optional **React + Vite** client in `frontend/`.
 
