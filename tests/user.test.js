@@ -1,15 +1,13 @@
-const mongoose = require('mongoose')
 const User = require('../src/models/User')
-
-const MONGODB_TEST_URI = process.env.MONGODB_TEST_URI || 'mongodb://127.0.0.1:27017/product_api_test'
+const { connectDb, disconnectDb } = require('./helpers/db')
 
 describe('User model', () => {
   beforeAll(async () => {
-    await mongoose.connect(MONGODB_TEST_URI)
+    await connectDb()
   })
 
   afterAll(async () => {
-    await mongoose.connection.close()
+    await disconnectDb()
   })
 
   beforeEach(async () => {
