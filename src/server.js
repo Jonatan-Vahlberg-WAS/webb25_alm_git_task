@@ -19,7 +19,7 @@ mongoose
   .connect(MONGODB_URI)
   .then(() => {
     app.listen(PORT, () => {
-      console.info('Server running on PORT', PORT)
+      console.info(`Server running on port ${PORT}`)
       console.info('MongoDB connected to', MONGODB_URI)
       console.info('Debug mode is', DEBUG ? 'enabled' : 'disabled')
     })
