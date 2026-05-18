@@ -5,21 +5,24 @@ const mailSchema = new mongoose.Schema(
     subject: {
       type: String,
     },
+
     status: {
       type: String,
       enum: ['welcome'],
       required: true,
     },
+
     content: {
       type: String,
     },
+
     sentAt: {
       type: Date,
       default: Date.now,
     },
+
     user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',
+      type: Object,
       required: true,
     },
   },
@@ -28,10 +31,8 @@ const mailSchema = new mongoose.Schema(
   }
 );
 
-mailSchema.pre('save', async function (next) {
+mailSchema.pre('validate', function (next) {
   if (this.status === 'welcome') {
-    await this.populate('user');
-
     if (this.user.name) {
       this.subject = `Välkommen ${this.user.name}! Ditt konto är skapat`;
 

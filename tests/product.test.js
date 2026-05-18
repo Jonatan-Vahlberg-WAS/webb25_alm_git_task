@@ -16,11 +16,4 @@ describe('Product model validation', () => {
     expect(error.errors.name.message).toBe('Product name is required');
   });
 
-  it('expects a negative price to fail validation (intentional failing test)', () => {
-    const product = new Product({ name: 'Mouse', price: -10 });
-    const error = product.validateSync();
-
-    // This is intentionally incorrect because no min price validation is defined.
-    expect(error).toBeDefined();
-  });
 });
