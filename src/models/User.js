@@ -7,12 +7,14 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
+
     email: {
       type: String,
       required: true,
       unique: true,
       trim: true,
     },
+
     password: {
       type: String,
       required: true,
@@ -23,15 +25,14 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-userSchema.post('save', async function (doc, next) {
-  if (doc.isNew) {
-    await Mail.create({
-      status: 'welcome',
-      user: doc._id,
-    });
-  }
-
-  next();
+userSchema.post('save', async function () {
+  await Mail.create({
+    status: 'welcome',
+    user: {
+      name: this.name,
+      email: this.email,
+    },
+  });
 });
 
 module.exports = mongoose.model('User', userSchema);
