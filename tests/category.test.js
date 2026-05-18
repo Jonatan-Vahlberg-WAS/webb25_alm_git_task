@@ -1,6 +1,6 @@
 const Category = require('../src/models/Category')
 
-describe ('Category model validation', () => {
+describe('Category model validation', () => {
     it('create a valid product with name, description and if active', () => {
         const category = new Category({
             name: 'electronics',

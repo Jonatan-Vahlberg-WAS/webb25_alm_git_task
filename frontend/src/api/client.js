@@ -1,3 +1,33 @@
+const TOKEN_KEY = 'product_api_jwt'
+
+/**
+ * @returns {string}
+ */
+export function getStoredToken() {
+  if (typeof sessionStorage === 'undefined') return ''
+  return sessionStorage.getItem(TOKEN_KEY) || ''
+}
+
+/**
+ * @param {string} token
+ */
+export function setStoredToken(token) {
+  if (typeof sessionStorage === 'undefined') return
+  if (token) {
+    sessionStorage.setItem(TOKEN_KEY, token)
+  } else {
+    sessionStorage.removeItem(TOKEN_KEY)
+  }
+}
+
+/**
+ * @returns {Record<string, string>}
+ */
+export function authHeaders() {
+  const t = getStoredToken()
+  return t ? { Authorization: `Bearer ${t}` } : {}
+}
+
 /**
  * @returns {string} API origin without trailing slash
  */

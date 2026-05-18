@@ -1,4 +1,4 @@
-import { apiUrl } from './client.js'
+import { apiUrl, authHeaders } from './client.js'
 
 /**
  * @param {Response} res
@@ -53,7 +53,7 @@ export async function fetchProducts(query = {}, options = {}) {
 export async function createProduct(body) {
   const res = await fetch(apiUrl('/products'), {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders() },
     body: JSON.stringify(body)
   })
   return handleResponse(res)
@@ -63,6 +63,6 @@ export async function createProduct(body) {
  * @param {string} id
  */
 export async function deleteProduct(id) {
-  const res = await fetch(apiUrl(`/products/${id}`), { method: 'DELETE' })
+  const res = await fetch(apiUrl(`/products/${id}`), { method: 'DELETE', headers: { ...authHeaders() } })
   return handleResponse(res)
 }

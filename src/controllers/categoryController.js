@@ -1,11 +1,12 @@
 const Category = require('../models/Category')
+const { formatMongooseValidation } = require('../utils/validation')
 
 exports.getAllCategories = async (req, res) => {
   try {
     const categories = await Category.find()
     res.status(200).json(categories)
-  } catch (err) {
-    res.status(500).json({ message: 'Failed to fetch categories', error: err.message })
+  } catch {
+    res.status(500).json({ message: 'Failed to fetch categories' })
   }
 }
 
@@ -20,7 +21,7 @@ exports.getCategoryById = async (req, res) => {
     if (err.name === 'CastError') {
       return res.status(400).json({ message: 'Invalid category id' })
     }
-    res.status(500).json({ message: 'Failed to fetch category', error: err.message })
+    res.status(500).json({ message: 'Failed to fetch category' })
   }
 }
 
@@ -30,17 +31,19 @@ exports.createCategory = async (req, res) => {
     const saved = await category.save()
     res.status(201).json(saved)
   } catch (err) {
-    res.status(500).json({ message: 'Failed to create category', error: err.message })
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: formatMongooseValidation(err) })
+    }
+    res.status(500).json({ message: 'Failed to create category' })
   }
 }
 
 exports.updateCategory = async (req, res) => {
   try {
-    const updated = await Category.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true }
-    )
+    const updated = await Category.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true
+    })
     if (!updated) {
       return res.status(404).json({ message: 'Category not found' })
     }
@@ -49,7 +52,10 @@ exports.updateCategory = async (req, res) => {
     if (err.name === 'CastError') {
       return res.status(400).json({ message: 'Invalid category id' })
     }
-    res.status(500).json({ message: 'Failed to update category', error: err.message })
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({ message: formatMongooseValidation(err) })
+    }
+    res.status(500).json({ message: 'Failed to update category' })
   }
 }
 
@@ -64,6 +70,6 @@ exports.deleteCategory = async (req, res) => {
     if (err.name === 'CastError') {
       return res.status(400).json({ message: 'Invalid category id' })
     }
-    res.status(500).json({ message: 'Failed to delete category', error: err.message })
+    res.status(500).json({ message: 'Failed to delete category' })
   }
 }
