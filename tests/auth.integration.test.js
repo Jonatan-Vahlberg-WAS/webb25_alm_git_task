@@ -19,10 +19,6 @@ describe('POST /api/auth/register', () => {
 
   it('create a welcome email on register', async () => {
     const res = await request(app).post('/auth/register').send({ email: 'new@test.com', password: 'password' })
-
-    console.log('Status:', res.status)
-    console.log('Body:', res.body)
-
     expect(res.status).toBe(201)
     const mail = await Mail.findOne({ status: 'welcome' })
     expect(mail).toBeTruthy()
