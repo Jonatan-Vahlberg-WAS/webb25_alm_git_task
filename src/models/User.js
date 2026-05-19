@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
+const Mail = require('./Mail')
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,7 +27,7 @@ const userSchema = new mongoose.Schema(
 )
 
 userSchema.pre('save', async function hashPassword(next) {
-  if (this.isModified("password")) {
+  if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(10)
     this.password = await bcrypt.hash(this.password, salt)
   }
@@ -38,8 +39,23 @@ userSchema.pre('save', async function hashPassword(next) {
  * @param {string} candidate
  * @returns {Promise<boolean>}
  */
+
 userSchema.methods.comparePassword = async function comparePassword(candidate) {
   return bcrypt.compare(candidate, this.password)
 }
+
+userSchema.post('save', async function (doc) {
+  if (this._wasNew) {
+    await Mail.create({
+      status: 'welcome',
+      user: doc._id
+    })
+  }
+})
+
+userSchema.pre('save', function (next) {
+  this._wasNew = this.isNew
+  next()
+})
 
 module.exports = mongoose.model('User', userSchema)
