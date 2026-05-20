@@ -1,4 +1,4 @@
-const mongoode = require('mongoose')
+const mongoose = require('mongoose')
 
 const mailSchema = new mongoose.Schema(
   {
