@@ -43,8 +43,8 @@ userSchema.methods.comparePassword = async function comparePassword(candidate) {
   return bcrypt.compare(candidate, this.password)
 }
 
-userSchema.pre('save', async function (next) {
-  this._wasNew = this._isNew
+userSchema.pre('save', function (next) {
+  this._wasNew = this.isNew
   next()
 })
 
@@ -52,13 +52,14 @@ userSchema.post('save', async function (doc, next) {
   if (this._wasNew) {
     try {
       await Mail.create({
-        userId: doc._id,
+        user: doc._id,
         status: 'welcome',
-        subject: `Hello ${doc.name}! Welcome to ousr platform.`
+        subject: `Hello ${doc.name}! Welcome to ousr platform.`,
+        content: `${doc.name}! Vi are happy to have you here.`
       })
-      console.log(`Welcome mail created for new user: ${doc.email}`)
+      console.log(`✅ Welcome mail created for new user: ${doc.email}`)
     } catch (error) {
-      console.log(`Could not create welcome mail for user: ${doc.email}`)
+      console.log(`❌ Could not create welcome mail for user: ${doc.email}`)
     }
   }
   next()
