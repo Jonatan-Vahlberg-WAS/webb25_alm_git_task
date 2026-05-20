@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs')
 const mongoose = require('mongoose')
+const Mail = require('./Mail.js')
 
 const userSchema = new mongoose.Schema(
   {
@@ -31,7 +32,20 @@ userSchema.pre('save', async function hashPassword(next) {
     this.password = await bcrypt.hash(this.password, salt)
   }
 
+  this.wasNew = this.isNew
+
   return next()
+})
+
+userSchema.post('save', async function (doc) {
+  if (doc.wasNew) {
+    await Mail.create({
+      status: 'welcome',
+      user: doc._id
+    })
+  }else {
+    console.log("User updated, not new")
+  }
 })
 
 /**
