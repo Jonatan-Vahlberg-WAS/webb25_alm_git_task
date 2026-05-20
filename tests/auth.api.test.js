@@ -1,6 +1,7 @@
 const request = require('supertest')
 const app = require('../src/app')
 const User = require('../src/models/User')
+const Mail = require('../src/models/Mail')
 const { connectDb, disconnectDb } = require('./helpers/db')
 
 describe('Auth API', () => {
@@ -14,6 +15,7 @@ describe('Auth API', () => {
 
   beforeEach(async () => {
     await User.deleteMany({ email: 'auth-api@example.com' })
+    await Mail.deleteMany({})
   })
 
   it('registers and returns a token without exposing the password', async () => {
@@ -57,5 +59,16 @@ describe('Auth API', () => {
     })
     expect(res.status).toBe(200)
     expect(res.body.token).toBeTruthy()
+  })
+
+  it('creates a welcome mail with register', async () => {
+    await request(app).post('/auth/register').send({
+      email: 'auth-api@example.com',
+      password: 'password123'
+    })
+
+    const mail = await Mail.findOne({status: 'welcome'})
+
+    expect(mail).not.toBeNull()
   })
 })
