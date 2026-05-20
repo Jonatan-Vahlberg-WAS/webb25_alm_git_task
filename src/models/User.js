@@ -53,9 +53,7 @@ userSchema.post('save', async function (doc, next) {
     try {
       await Mail.create({
         user: doc._id,
-        status: 'welcome',
-        subject: `Hello ${doc.name}! Welcome to ousr platform.`,
-        content: `${doc.name}! Vi are happy to have you here.`
+        status: 'welcome'
       })
       console.log(`✅ Welcome mail created for new user: ${doc.email}`)
     } catch (error) {
