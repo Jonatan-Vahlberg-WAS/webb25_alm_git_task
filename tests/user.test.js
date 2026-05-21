@@ -1,4 +1,5 @@
 const User = require('../src/models/User')
+const Mail = require('../src/models/Mail')
 const { connectDb, disconnectDb } = require('./helpers/db')
 
 describe('User model', () => {
@@ -54,5 +55,21 @@ describe('User model', () => {
     expect(updated.password).not.toBe(oldHash)
     expect(await updated.comparePassword('newpassword99')).toBe(true)
     expect(await updated.comparePassword('password123')).toBe(false)
+  })
+
+  it('creates a welcome email when a new user is registered', async () => {
+    const user = await User.create({ email: 'test@test.com', password: 'password' })
+    const mail = await Mail.findOne({ user: user._id })
+
+    expect(mail).toBeTruthy()
+    expect(mail.status).toBe('welcome')
+  })
+
+  it('does not create a new email when updating an existing user', async () => {
+    const user = await User.create({ email: 'test2@test.com', password: 'password' })
+    await user.save()
+
+    const mails = await Mail.find({ user: user._id })
+    expect(mails.length).toBe(1)
   })
 })
