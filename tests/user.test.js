@@ -1,5 +1,6 @@
 const User = require('../src/models/User')
 const { connectDb, disconnectDb } = require('./helpers/db')
+const Mail = require('../src/models/Mail')
 
 describe('User model', () => {
   beforeAll(async () => {
@@ -12,6 +13,7 @@ describe('User model', () => {
 
   beforeEach(async () => {
     await User.deleteMany({})
+    await Mail.deleteMany({})
   })
 
   it('requires a unique email', async () => {
@@ -55,4 +57,12 @@ describe('User model', () => {
     expect(await updated.comparePassword('newpassword99')).toBe(true)
     expect(await updated.comparePassword('password123')).toBe(false)
   })
-})
+
+  it('creates a welcome mail after registration', async () => {
+    const user = await User.create({ email: 'welcome@example.com', password: 'password123' })
+    const mail = await Mail.findOne({ user: user._id })
+    expect(mail).not.toBeNull()
+    expect(mail.status).toBe('welcome')
+    expect(mail.subject).toBe('Welcome')
+  })
+})  
