@@ -28,12 +28,15 @@ describe('Product model validation', () => {
       const error = product.validateSync()
 
       expect(error).toBeDefined()
-      expect(error.errors.price.message).toBe('Path `price` (-10) is less than minimum allowed value (0).')
+      expect(error.errors.price.message).toBe(
+        'Path `price` (-10) is less than minimum allowed value (0).'
+      )
     })
 
     it('accepts a price of zero', () => {
       const product = new Product({ name: 'Sticker', price: 0 })
       const error = product.validateSync()
+
       expect(error).toBeUndefined()
     })
   })
@@ -46,6 +49,7 @@ describe('Product model validation', () => {
         description: 'Mechanical keyboard',
         category: 'electronics'
       })
+
       const error = product.validateSync()
 
       expect(error).toBeDefined()

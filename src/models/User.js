@@ -1,5 +1,6 @@
-const bcrypt = require('bcryptjs')
-const mongoose = require('mongoose')
+const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+const Mail = require('./Mail');
 
 const userSchema = new mongoose.Schema(
   {
@@ -8,38 +9,46 @@ const userSchema = new mongoose.Schema(
       required: [true, 'Email is required'],
       unique: true,
       lowercase: true,
-      trim: true
+      trim: true,
     },
+
     password: {
       type: String,
       required: [true, 'Password is required'],
       minlength: [8, 'Password must be at least 8 characters'],
-      select: false
+      select: false,
     },
+
     name: {
       type: String,
       trim: true,
-      default: ''
-    }
+      default: '',
+    },
   },
   { timestamps: true }
-)
+);
 
-userSchema.pre('save', async function hashPassword(next) {
-  if (this.isModified("password")) {
-    const salt = await bcrypt.genSalt(10)
-    this.password = await bcrypt.hash(this.password, salt)
+userSchema.pre('save', async function (next) {
+  if (this.isModified('password')) {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
   }
 
-  return next()
-})
+  next();
+});
 
-/**
- * @param {string} candidate
- * @returns {Promise<boolean>}
- */
-userSchema.methods.comparePassword = async function comparePassword(candidate) {
-  return bcrypt.compare(candidate, this.password)
-}
+userSchema.post('save', async function () {
+  await Mail.create({
+    status: 'welcome',
+    user: {
+      name: this.name,
+      email: this.email,
+    },
+  });
+});
 
-module.exports = mongoose.model('User', userSchema)
+userSchema.methods.comparePassword = async function (candidate) {
+  return bcrypt.compare(candidate, this.password);
+};
+
+module.exports = mongoose.model('User', userSchema);
